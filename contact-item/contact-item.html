@@ -1,0 +1,215 @@
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<!--
+Element encapsulating a contact record. Contains templates for viewing and editing.
+
+##### Example
+
+    <contact-item></contact-item>
+
+@element contact-item
+@blurb A detailed view of a contact record.
+@status alpha
+@homepage http://polymerlabs.github.io/seed-element
+-->
+<polymer-element name="contact-item" attributes="notitle firstName lastName contactId contactEmail contactPhone contactAddress">
+
+<template>
+    <!-- <link rel="stylesheet" href="contact-item.css"> -->
+	<link rel="stylesheet" href="../bower_components/foundation/css/normalize.css">
+	<link rel="stylesheet" href="../bower_components/foundation/css/foundation.css">
+
+	<template if="{{ !currentlyEditing }}">
+		<!-- TODO: use links for email and phone if data isn't default -->
+		<article class="row">
+			<img class="large-5 columns" src="http://placehold.it/300x300">
+			<div class="large-7 columns">
+				<h3> {{ firstName }} {{ lastName }}</h3>
+				<h3> {{ contactAddress }} </h3>
+				<h3>
+					<a href="mailto:{{contactEmail}}">{{contactEmail}}</a>
+				</h3>
+				<h3>
+					<a href="tel:{{contactPhone}}">{{ contactPhone }}</a>
+				</h3>
+				<div class="row">
+					<a href="#" class="button" on-click="{{edit}}">edit</a>
+				</div>
+			</div>
+		</article>
+	</template>
+
+	<template if="{{ currentlyEditing }}">
+		<form class="row">
+			<img class="large-5 columns" src="http://placehold.it/300x300">
+			<div class="large-7 columns">
+				<label for="firstname">First Name:</label>
+				<input name="firstname" type="text" placeholder="Jane" required>
+				<label for="lastname">Last Name:</label>
+				<input name="lastname" type="text" placeholder="Jones" required>
+				<label for="contactaddress">Address:</label>
+				<input name="contactaddress" type="text" placeholder="123 Main">
+				<label for="contactemail">Email:</label>
+				<input name="contactemail" type="email" placeholder="janepublic@example.com">
+				<label for="contactphone">Phone:</label>
+				<input name="contactphone" type="tel" placeholder="312.555.5555">
+				<div class="row">
+					<input type="submit" class="button" name="submit" text="save">
+					<a href="#" class="button" on-click="{{view}}">cancel</a>
+				</div>
+			</div>
+		</form>
+	</template>
+  </template>
+
+  <script>
+
+    Polymer({
+
+	  /**
+	   * An identifier for the contact. Required.
+	   *
+	   * @attribute contactId
+	   * @type string
+	   */
+	  contactId: '',
+
+	  /**
+	   * The contact's first name. Required.
+	   *
+	   * @attribute firstName
+	   * @type string
+	   * @default 'Jane'
+	   */
+	  firstName: 'Jane',
+
+	  /**
+	   * The contact's last name. Required.
+	   *
+	   * @attribute lastName
+	   * @type string
+	   * @default 'Jones'
+	   */
+	  lastName: 'Jones',
+
+	  /**
+	   * The contact's email address.
+	   *
+	   * @attribute contactEmail
+	   * @type string
+	   * @default 'no email'
+	   */
+	  contactEmail: 'no email',
+
+	  /**
+	   * The contact's phone number.
+	   *
+	   * @attribute contactPhone
+	   * @type string
+	   * @default 'no phone'
+	   */
+	  contactPhone: 'no phone',
+
+	  /**
+	   * The contact's address.
+	   *
+	   * @attribute contactAddress
+	   * @type string
+	   * @default 'no address'
+	   */
+	  contactAddress: 'no address',
+
+	  /**
+	   * Reflects the edit state of this contact.
+	   *
+	   * @property currentlyEditing
+	   * @type bool
+	   * @default false
+	   */
+	  currentlyEditing: false,
+
+      ready: function() {
+        // Ready is a lifecycle callback.
+        // You can do setup work in here.
+        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+		//console.log(this.querySelector('#edit-contact'));
+      },
+
+	  currentlyEditingChanged: function(oldValue, newValue) {
+		console.log('changed', arguments);
+	  },
+
+      /**
+       * The `sayHello` method will return a greeting.
+       *
+       * @method sayHello
+       * @param {String} greeting Pass in a specific greeting.
+       * @return {String} Returns a string greeting.
+       */
+      sayHello: function(greeting) {
+        var response = greeting || 'Hello World!';
+        return 'contact-item says, ' + response;
+      },
+
+	  /**
+	   * Handles the edit button click event. Simply calls `switchMode`
+	   *
+	   * @method edit
+	   * @param {EventObject} e Mouse click event parameters.
+	   * @return undefined
+	   */
+	  edit: function(e) {
+		e.preventDefault();
+		this.switchMode();
+	  },
+
+
+	  /**
+	   * Handles the view button click event. Calls `switchMode` with
+	   * {type: 'view} as its parameter.
+	   *
+	   * @method view
+	   * @param {EventObject} e Mouse click event parameters.
+	   * @return undefined
+	   */
+	  view: function(e) {
+		e.preventDefault();
+		this.switchMode({ type: 'view' });
+	  },
+
+	  /**
+	   * The `contact-item-mode-change` event is fired when the `switchMode`
+	   * method is called.
+	   *
+	   * @event contact-item-mode-change
+	   * @param {Object} mode
+	   *	@param {string} mode.type Target mode. Types are: 'edit', 'view'
+	   */
+
+	  /**
+	   * The `switchMode` method is the method wrapper for the
+	   * `contact-item-mode-change` event.
+	   *
+	   * @method switchMode
+	   */
+	  switchMode: function(cfg) {
+		  var data = cfg || { type: 'edit' };
+
+		  this.currentlyEditing = (data.type === 'edit') ? true : false;
+		  this.fire('contact-item-mode-change', data);
+	  }
+
+    });
+
+  </script>
+
+</polymer-element>
