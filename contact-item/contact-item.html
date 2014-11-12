@@ -28,6 +28,10 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 	<link rel="stylesheet" href="../bower_components/foundation/css/normalize.css">
 	<link rel="stylesheet" href="../bower_components/foundation/css/foundation.css">
 
+	<template id="emptyPhone">
+		
+	</template>
+
 	<template if="{{ !currentlyEditing }}">
 		<!-- TODO: use links for email and phone if data isn't default -->
 		<article class="row">
@@ -81,7 +85,7 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 	   * @attribute contactId
 	   * @type string
 	   */
-	  contactId: '',
+	  contactId: undefined,
 
 	  /**
 	   * The contact's first name. Required.
@@ -106,9 +110,8 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 	   *
 	   * @attribute contactEmail
 	   * @type string
-	   * @default 'no email'
 	   */
-	  contactEmail: 'no email',
+	  contactEmail: undefined,
 
 	  /**
 	   * The contact's phone number.
@@ -117,7 +120,7 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 	   * @type string
 	   * @default 'no phone'
 	   */
-	  contactPhone: 'no phone',
+	  contactPhone: undefined,
 
 	  /**
 	   * The contact's address.
