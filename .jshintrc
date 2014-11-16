@@ -1,0 +1,44 @@
+{
+	// triple equals in this house
+	"eqeqeq": true,
+
+	// no for-in loops w/o filtering the object for its own properties
+	"forin": true,
+
+	// no overwriting prototypes of *native* objects
+	"freeze": true,
+
+	// no immediately invoking functions w/o surrounding parentheses
+	"immed": true,
+
+	// no using variables before they're defined
+	"latedef": true,
+
+	// no undeclared variables
+	"undef": true,
+
+	// no use of arguments.caller / arguments.callee
+	"noarg": true,
+
+	// single quotes. all day. that is all.
+	"quotmark": "single",
+
+	// warns about unused symbols
+	"unused": true,
+
+	// suppresses warnings about using brackets instead of dots when
+	// referring to object properties
+	"sub": true,
+
+	// suppresses warnings about declaring variables inside of control
+	// structures while accessing them later from the outside.
+	"expr": true,
+
+	// just don't do it (unless you can justify that s#@t)
+	"evil": true,
+	
+	// curly braces are required for all loops and conditionals except
+	// single line statements. It's preferable to have the statement on the
+	// same line as the expression
+	"curly": false
+}
