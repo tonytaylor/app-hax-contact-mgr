@@ -19,9 +19,13 @@
     "/tests/"
   ],
   "dependencies": {
-		"foundation": "*",
+    "foundation": "*",
     "polymer": "Polymer/polymer#^0.4.1",
-		"react": "*"
+    "react": "*",
+    "app-router": "~2.0.3",
+    "amplify": "~1.1.2",
+    "lodash": "~2.4.1",
+    "foundation-icon-fonts": "*"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^0.7.3"
