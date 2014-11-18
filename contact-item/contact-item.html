@@ -28,188 +28,169 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 	<link rel="stylesheet" href="../bower_components/foundation/css/normalize.css">
 	<link rel="stylesheet" href="../bower_components/foundation/css/foundation.css">
 
-	<template id="emptyPhone">
-		
-	</template>
-
-	<template if="{{ !currentlyEditing }}">
-		<!-- TODO: use links for email and phone if data isn't default -->
-		<article class="row">
-			<img class="large-5 columns" src="http://placehold.it/300x300">
-			<div class="large-7 columns">
-				<h3> {{ firstName }} {{ lastName }}</h3>
-				<h3> {{ contactAddress }} </h3>
-				<h3>
-					<a href="mailto:{{contactEmail}}">{{contactEmail}}</a>
-				</h3>
-				<h3>
-					<a href="tel:{{contactPhone}}">{{ contactPhone }}</a>
-				</h3>
-				<div class="row">
-					<a href="#" class="button" on-click="{{edit}}">edit</a>
+	<template bind="{{ contact as c }}">
+		<template if="{{ !currentlyEditing }}">
+			<!-- TODO: use links for email and phone if data isn't default -->
+			<article class="row">
+				<img class="large-5 columns" src="http://placehold.it/300x300">
+				<div class="large-7 columns">
+					<h3> {{ c.firstName }} {{ c.lastName }}</h3>
+					<h3> {{ c.contactAddress }} </h3>
+					<h3>
+						<small>{{c.contactCompany}}</small>
+						<a href="mailto:{{c.contactEmail}}">
+							{{c.contactEmail}}
+						</a>
+					</h3>
+					<h3>
+						<a href="tel:{{c.contactPhone}}">
+							{{c.contactPhone}}
+						</a>
+					</h3>
+					<div class="row">
+						<a href="#" class="button" on-click="{{edit}}">
+							edit
+						</a>
+					</div>
 				</div>
-			</div>
-		</article>
-	</template>
+			</article>
+		</template>
 
-	<template if="{{ currentlyEditing }}">
-		<form class="row">
-			<img class="large-5 columns" src="http://placehold.it/300x300">
-			<div class="large-7 columns">
-				<label for="firstname">First Name:</label>
-				<input name="firstname" type="text" placeholder="Jane" required>
-				<label for="lastname">Last Name:</label>
-				<input name="lastname" type="text" placeholder="Jones" required>
-				<label for="contactaddress">Address:</label>
-				<input name="contactaddress" type="text" placeholder="123 Main">
-				<label for="contactemail">Email:</label>
-				<input name="contactemail" type="email" placeholder="janepublic@example.com">
-				<label for="contactphone">Phone:</label>
-				<input name="contactphone" type="tel" placeholder="312.555.5555">
-				<div class="row">
-					<input type="submit" class="button" name="submit" text="save">
-					<a href="#" class="button" on-click="{{view}}">cancel</a>
+		<template if="{{ currentlyEditing }}">
+			<form class="row" on-submit="{{ save }}">
+				<input name="contactId" type="hidden" value="{{c.contactId}}">
+				<img class="large-5 columns" src="http://placehold.it/300x300">
+				<div class="large-7 columns">
+					<label for="firstName">First Name:</label>
+					<input name="firstName" type="text" value="{{c.firstName}}" required>
+					<label for="lastName">Last Name:</label>
+					<input name="lastName" type="text" value="{{c.lastName}}" required>
+					<label for="contactCompany">Company:</label>
+					<input name="contactCompany" type="text" value="{{c.contactCompany}}">
+					<label for="contactAddress">Address:</label>
+					<input name="contactAddress" type="text" value="{{c.contactAddress}}">
+					<label for="contactEmail">Email:</label>
+					<input name="contactEmail" type="email" value="{{c.contactEmail}}">
+					<label for="contactPhone">Phone:</label>
+					<input name="contactPhone" type="tel" value="{{c.contactPhone}}">
+					<div class="row">
+						<input type="submit" class="button" name="submit" value="save">
+						<a href="#" class="button" on-click="{{view}}">cancel</a>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</template>
 	</template>
   </template>
 
   <script>
 
+	var da = DataAccess.getInstance();
+
     Polymer({
 
-	  /**
-	   * An identifier for the contact. Required.
-	   *
-	   * @attribute contactId
-	   * @type string
-	   */
-	  contactId: undefined,
+		publish: {
+			contact: undefined
+		},
 
-	  /**
-	   * The contact's first name. Required.
-	   *
-	   * @attribute firstName
-	   * @type string
-	   * @default 'Jane'
-	   */
-	  firstName: 'Jane',
+		/**
+		 * An identifier for the contact. Required.
+		 *
+		 * @attribute contactId
+		 * @type string
+		 */
+		contactId: undefined,
 
-	  /**
-	   * The contact's last name. Required.
-	   *
-	   * @attribute lastName
-	   * @type string
-	   * @default 'Jones'
-	   */
-	  lastName: 'Jones',
+	    /**
+	     * Reflects the edit state of this contact.
+	     *
+	     * @property currentlyEditing
+	     * @type bool
+	     * @default false
+	     */
+		 currentlyEditing: false,
+		 
+		 attached: function() { 
+			 record = da.getRecordAtId('contactId', this.contactId);
+			 this.contact = record;
+		 },
+		 
+		 currentlyEditingChanged: function(oldValue, newValue) {
+			 console.log('changed', arguments);
+		 },
 
-	  /**
-	   * The contact's email address.
-	   *
-	   * @attribute contactEmail
-	   * @type string
-	   */
-	  contactEmail: undefined,
-
-	  /**
-	   * The contact's phone number.
-	   *
-	   * @attribute contactPhone
-	   * @type string
-	   * @default 'no phone'
-	   */
-	  contactPhone: undefined,
-
-	  /**
-	   * The contact's address.
-	   *
-	   * @attribute contactAddress
-	   * @type string
-	   * @default 'no address'
-	   */
-	  contactAddress: 'no address',
-
-	  /**
-	   * Reflects the edit state of this contact.
-	   *
-	   * @property currentlyEditing
-	   * @type bool
-	   * @default false
-	   */
-	  currentlyEditing: false,
-
-      ready: function() {
-        // Ready is a lifecycle callback.
-        // You can do setup work in here.
-        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
-		//console.log(this.querySelector('#edit-contact'));
-      },
-
-	  currentlyEditingChanged: function(oldValue, newValue) {
-		console.log('changed', arguments);
-	  },
-
-      /**
-       * The `sayHello` method will return a greeting.
-       *
-       * @method sayHello
-       * @param {String} greeting Pass in a specific greeting.
-       * @return {String} Returns a string greeting.
-       */
-      sayHello: function(greeting) {
-        var response = greeting || 'Hello World!';
-        return 'contact-item says, ' + response;
-      },
-
-	  /**
-	   * Handles the edit button click event. Simply calls `switchMode`
-	   *
-	   * @method edit
-	   * @param {EventObject} e Mouse click event parameters.
-	   * @return undefined
-	   */
-	  edit: function(e) {
-		e.preventDefault();
-		this.switchMode();
-	  },
+	  	/**
+	  	 * Handles the edit button click event. Simply calls `switchMode`
+	  	 *
+	  	 * @method edit
+	  	 * @param {EventObject} e Mouse click event parameters.
+	  	 * @return undefined
+	  	 */
+	 	 edit: function(e) {
+			e.preventDefault();
+			this.switchMode();
+		  },
 
 
-	  /**
-	   * Handles the view button click event. Calls `switchMode` with
-	   * {type: 'view} as its parameter.
-	   *
-	   * @method view
-	   * @param {EventObject} e Mouse click event parameters.
-	   * @return undefined
-	   */
-	  view: function(e) {
-		e.preventDefault();
-		this.switchMode({ type: 'view' });
-	  },
+	   /**
+	    * Handles the view button click event. Calls `switchMode` with
+	    * {type: 'view} as its parameter.
+	    *
+	    * @method view
+	    * @param {EventObject} e Mouse click event parameters.
+	    * @return undefined
+	    */
+	   	view: function(e) {
+			e.preventDefault();
+			this.switchMode({ type: 'view' });
+	 	},
 
-	  /**
-	   * The `contact-item-mode-change` event is fired when the `switchMode`
-	   * method is called.
-	   *
-	   * @event contact-item-mode-change
-	   * @param {Object} mode
-	   *	@param {string} mode.type Target mode. Types are: 'edit', 'view'
-	   */
+	  	/**
+		 * The `contact-item-mode-change` event is fired when the
+		 * `switchMode` method is called.
+	   	 *
+	     * @event contact-item-mode-change
+	     * @param {Object} mode
+	     * @param {string} mode.type Target mode. Types are: 'edit', 'view'
+	     */
 
-	  /**
-	   * The `switchMode` method is the method wrapper for the
-	   * `contact-item-mode-change` event.
-	   *
-	   * @method switchMode
-	   */
-	  switchMode: function(cfg) {
-		  var data = cfg || { type: 'edit' };
+	    /**
+	     * The `switchMode` method is the method wrapper for the
+	     * `contact-item-mode-change` event.
+	     *
+	     * @method switchMode
+	     */
+	   	switchMode: function(cfg) {
+			var data = cfg || { type: 'edit' };
+			
+			this.currentlyEditing = (data.type === 'edit') ? true : false;
+			this.fire('contact-item-mode-change', data);
+	  	},
 
-		  this.currentlyEditing = (data.type === 'edit') ? true : false;
-		  this.fire('contact-item-mode-change', data);
-	  }
+		getValues: function(form) {
+
+			var retval = {};
+
+			for (var e in form) {
+				if (form.hasOwnProperty(e)) {
+					if (form[e].name !== 'submit') {
+						retval[form[e].name] = form[e].value;
+					}
+				}
+			}
+
+			return retval;
+		},
+
+	  	save: function(evt) {
+			evt.preventDefault();
+
+			var data = this.getValues(evt.target.elements)
+				router = document.querySelector('app-router');
+
+			da.updateData(data);
+			router.go('/');
+		}
 
     });
 
