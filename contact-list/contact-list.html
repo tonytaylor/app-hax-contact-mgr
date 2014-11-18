@@ -21,15 +21,46 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://polymerlabs.github.io/seed-element
 -->
-<polymer-element name="contact-list" attributes="notitle author">
+<polymer-element name="contact-list" attributes="notitle author firstName lastName contactId">
 
   <template>
 
-    <link rel="stylesheet" href="contact-list.css">
+ 	<link rel="stylesheet" href="../bower_components/foundation/css/normalize.css">
+	<link rel="stylesheet" href="../bower_components/foundation/css/foundation.css">
+	<!-- <link rel="stylesheet" href="contact-list.css"> -->
 
-    <h1>Hello from contact-list</h1>
-    <content></content>
-
+	<template if="{{contacts.length < 1}}">
+		<div class="row">
+			<div class="large-8 columns">
+				<h2>Sorry. No data found.</h2>
+				<h5 class="subheader">click the "seed client data" button</h5>
+			</div>
+		</div>
+	</template>
+	<template repeat="{{c in contacts}}">
+		<div id="{{c.contactId}}" class="row">
+			<div class="panel row">
+				<div class="large-1 columns">
+					<a href="/#/contact/{{c.contactId}}">
+						<img width="64" src="http://placehold.it/64x64">
+					</a>
+				</div>
+				<h5 class="large-11 columns">
+					{{c.firstName}} {{c.lastName}}
+					<br>
+					<small>
+						<span>{{c.contactCompany}}</span> |
+						<a href="mailto:{{c.contactEmail}}">
+							{{c.contactEmail}}
+						</a> |
+						<a href="tel:{{c.contactPhone}}">
+							{{c.contactPhone}}
+						</a>
+					</small>
+				</h5>
+			</div>
+		</div>
+	</template>
   </template>
 
   <script>
@@ -44,20 +75,15 @@ Element providing solution to no problem in particular.
        */
       author: 'Tony Taylor',
 
-      /**
-       * `fancy` is a property that does something fancy.
-       *
-       * @property fancy
-       * @type bool
-       * @default false
-       */
-      fancy: false,
+	  publish: {
+		contacts: []
+	  },
 
-      ready: function() {
-        // Ready is a lifecycle callback.
-        // You can do setup work in here.
-        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
-      },
+	  attached: function() {
+		  this.contacts = (function() {
+			  return DataAccess.getInstance().getDataSource() || [];
+		  })();
+	  },
 
       /**
        * The `sayHello` method will return a greeting.
