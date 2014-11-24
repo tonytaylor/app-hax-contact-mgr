@@ -16,5 +16,16 @@
 		console.log('unloading');
 		if (c) c.contacts = [];
 	});
+
+	/*window.addEventListener('contact-item-attached', function(ele) {
+		console.log('bang');
+		var record;
+
+		if (ele.contactId) {
+			console.log('going!');
+			record = da.getRecordAtId('contactId', ele.contactId);
+			ele.contact = record;
+		}
+	});*/
 })();
 

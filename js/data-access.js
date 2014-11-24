@@ -28,6 +28,10 @@ var DataAccess = (function() {
 		},
 
 		getRecordAtId: function(fieldname, value) {
+			if (!value) {
+				console.log('no value provided');
+				return;
+			}
 			var ds = this.getDataSource(),
 				retval = ds.filter(function(e) {
 					return e[fieldname] === value;	
@@ -37,6 +41,7 @@ var DataAccess = (function() {
 		},
 
 		getDataSource: function() {
+			//console.log('!!', this, this.datasource);
 			if (!this.datasource) {
 				var msg = [
 					'please call setDataSource before using this method.'
