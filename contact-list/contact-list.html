@@ -21,7 +21,7 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://polymerlabs.github.io/seed-element
 -->
-<polymer-element name="contact-list" attributes="notitle author firstName lastName contactId">
+<polymer-element name="contact-list" attributes="notitle author">
 
   <template>
 
@@ -38,14 +38,14 @@ Element providing solution to no problem in particular.
 		</div>
 	</template>
 	<template repeat="{{c in contacts}}">
-		<div id="{{c.contactId}}" class="row">
+	<div id="{{c.contactId}}" class="row" on-click="{{clickedItem}}">
 			<div class="panel row">
-				<div class="large-1 columns">
+				<div class="large-1 medium-1 columns">
 					<a href="/#/contact/{{c.contactId}}">
 						<img width="64" src="http://placehold.it/64x64">
 					</a>
 				</div>
-				<h5 class="large-11 columns">
+				<h5 class="large-11 medium-11 columns">
 					{{c.firstName}} {{c.lastName}}
 					<br>
 					<small>
@@ -76,7 +76,16 @@ Element providing solution to no problem in particular.
       author: 'Tony Taylor',
 
 	  publish: {
-		contacts: []
+		  contacts: []
+	  },
+
+	  created: function() {
+		this.appEvents = {
+		  'contact-list-edit-list': true,
+		  'contact-list-filter-list': true,
+		  'contact-list-selected-item': true,
+		  'contact-list-remove-list-items': true
+	  	};
 	  },
 
 	  attached: function() {
@@ -84,6 +93,8 @@ Element providing solution to no problem in particular.
 			  return DataAccess.getInstance().getDataSource() || [];
 		  })();
 	  },
+
+	  ready: function() {},
 
       /**
        * The `sayHello` method will return a greeting.
@@ -96,6 +107,10 @@ Element providing solution to no problem in particular.
         var response = greeting || 'Hello World!';
         return 'contact-list says, ' + response;
       },
+
+	  clickedItem: function() {
+		  this.fire('contact-list-selected-item', arguments);
+	  },
 
       /**
        * The `contact-list-lasers-success` event is fired whenever we
