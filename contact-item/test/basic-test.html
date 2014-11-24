@@ -29,13 +29,13 @@
     var myEl = document.querySelector('contact-item');
 
     suite('<contact-item>', function() {
-		test('has a defalt "firstname" property', function() {
+		/*test('has a defalt "firstname" property', function() {
 			assert.equal(myEl.firstName, 'Jane');
 		});
 
 		test('has a default "lastname" property', function() {
 			assert.equal(myEl.lastName, 'Jones');
-		});
+		});*/
 
 		test('contains an image element', function() {
 			var imageEle = myEl.querySelector('img');
@@ -46,6 +46,9 @@
 			assert.equal(myEl.currentlyEditing, false);
 		});
 
+		// smelly test!
+		// may this should have separate templates? be separate elements
+		// (e.g. - view-contact / edit-contact)?
 	  	test('can change modality', function(done) {
 			myEl.addEventListener('contact-item-mode-change', function(d) {
 				assert.equal(d.detail.type, 'edit');
@@ -55,6 +58,15 @@
 			myEl.switchMode();
 	  	});
 
+		// smelly test!
+		test('announces when its rendering', function(done) {
+			myEl.addEventListener('contact-item-attached', function(d) {
+				console.log('bang');
+				assert.equal(1 + 1, 2);
+				done();
+			})
+			myEl.fire('contact-item-attached');
+		});
     });
   </script>
 
