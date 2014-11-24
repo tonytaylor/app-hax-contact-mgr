@@ -8,6 +8,7 @@
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-router/app-router.html">
 
 <!--
 Element encapsulating a contact record. Contains templates for viewing and editing.
@@ -27,6 +28,19 @@ Element encapsulating a contact record. Contains templates for viewing and editi
     <!-- <link rel="stylesheet" href="contact-item.css"> -->
 	<link rel="stylesheet" href="../bower_components/foundation/css/normalize.css">
 	<link rel="stylesheet" href="../bower_components/foundation/css/foundation.css">
+
+	<!-- nasty hack #1 -->
+	<app-router>
+		<app-route path="/new/contact">
+			<template>
+				<script>
+					var c = document.querySelector('contact-item');
+
+					c.currentlyEditing = true;
+				</script>
+			</template>
+		</app-route>
+	</app-router>
 
 	<template bind="{{ contact as c }}">
 		<template if="{{ !currentlyEditing }}">
@@ -85,7 +99,7 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 
   <script>
 
-	var da = DataAccess.getInstance();
+	//var da = DataAccess.getInstance();
 
     Polymer({
 
@@ -100,6 +114,14 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 		 * @type string
 		 */
 		contactId: undefined,
+		
+		/**
+		 * The `contact-item-attached` event is fired when the
+		 * allow an interface for access with other components.
+	   	 *
+	     * @event contact-item-attached
+	     * @param {Element} contact-item element
+	     */
 
 	    /**
 	     * Reflects the edit state of this contact.
@@ -109,10 +131,21 @@ Element encapsulating a contact record. Contains templates for viewing and editi
 	     * @default false
 	     */
 		 currentlyEditing: false,
+
+		 created: function() {
+			this.appEvents = {
+				'contact-item-edit-item': true,
+				'contact-item-save-item': true,
+				'contact-item-view-item': true
+			};
+		 },
 		 
 		 attached: function() { 
-			 record = da.getRecordAtId('contactId', this.contactId);
-			 this.contact = record;
+			 // deprecating this approach - way too coupled
+			 //record = da.getRecordAtId('contactId', this.contactId);
+			 //this.contact = record;
+			 //console.log('now!', this.parentNode.parentNode);
+			 //this.fire('contact-item-atttached', this);
 		 },
 		 
 		 currentlyEditingChanged: function(oldValue, newValue) {
