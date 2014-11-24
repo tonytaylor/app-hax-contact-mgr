@@ -1,0 +1,125 @@
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<!--
+Element providing context-aware interface.
+
+##### Example
+
+    <control-bar></control-bar>
+
+@element contact-group
+@blurb Holds a group of contact list items.
+@status alpha
+@homepage http://polymerlabs.github.io/seed-element
+-->
+<polymer-element name="control-bar" attributes="notitle author name">
+
+	<template>
+		<link rel="stylesheet" 
+	  		href="../bower_components/foundation/css/normalize.css">
+	  <link rel="stylesheet" 
+			href="../bower_components/foundation/css/foundation.css">
+	  <!-- <link rel="stylesheet" 
+	  href="../bower_components/foundation-icon-fonts/foundation-icons.css"> -->
+	  <link rel="stylesheet" href="../bower_components/fontawesome/css/font-awesome.css">
+	  <link rel="stylesheet" href="control-bar.css">
+
+	<div class="ctrl-bar icon-bar three-up">
+		<a class="item" href="/#/new/contact">
+			<span class="fi-page-add ctrl-item"></span>
+			<label>new contact</label>
+		</a>
+		<a class="item">
+			<span class="fa fa-search fa-2x ctrl-item"></span>
+			<label>filter contacts</label>
+		</a>
+		<a class="item">
+			<span class="fi-page-edit ctrl-item"></span>
+			<!-- <img src="http://placehold.it/24x24"> -->
+			<label>edit list</label>
+		</a>
+	</div>
+
+  </template>
+
+  <script>
+
+    Polymer({
+      /**
+       * The `author` attribute sets an initial author
+       *
+       * @attribute author
+       * @type string
+       * @default 'Tony Taylor'
+       */
+      author: 'Tony Taylor',
+
+	  /**
+	   * `name` is the legend for this fieldset
+	   *
+	   * @property name
+	   * @type string
+	   * @default '_'
+	   */
+	  name: '_',
+
+      /**
+       * `fancy` is a property that does something fancy.
+       *
+       * @property fancy
+       * @type bool
+       * @default false
+       */
+      fancy: false,
+
+      ready: function() {
+        // Ready is a lifecycle callback.
+        // You can do setup work in here.
+        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+      },
+
+      /**
+       * The `sayHello` method will return a greeting.
+       *
+       * @method sayHello
+       * @param {String} greeting Pass in a specific greeting.
+       * @return {String} Returns a string greeting.
+       */
+      sayHello: function(greeting) {
+        var response = greeting || 'Hello World!';
+        return 'contact-group says, ' + response;
+      },
+
+      /**
+       * The `contact-group-lasers-success` event is fired whenever we
+       * call fireLasers.
+       *
+       * @event contact-group-lasers-success
+       * @param {Object} detail
+       *   @param {string} detail.sound An amazing sound.
+       */
+
+      /**
+       * The `fireLasers` method will fire the lasers. At least
+       * it will dispatch an event that claims lasers were fired :)
+       *
+       * @method fireLasers
+       */
+      fireLasers: function() {
+        this.fire('contact-group-lasers-success', { sound: 'Pew pew pew!' });
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

@@ -1,0 +1,22 @@
+{
+  "name": "contact-mgr",
+  "version": "0.3.0",
+  "description": "manages contacts",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tonytaylor/app-hax-contact-mgr.git"
+  },
+  "author": "Tony Taylor <tony@tonetaylor.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tonytaylor/app-hax-contact-mgr/issues"
+  },
+  "homepage": "https://github.com/tonytaylor/app-hax-contact-mgr",
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  }
+}

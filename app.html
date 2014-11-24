@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	
+		<title>contact manager</title>
+		<script src="./bower_components/platform/platform.js"></script>
+		<link rel="import" href="./contact-mgr/contact-mgr.html">
+		<link rel="import" href="contact-list/contact-list.html">
+		<link rel="import" href="contact-item/contact-item.html">
+		<link rel="import" href="../control-bar/control-bar.html">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<contact-mgr>
+			<contact-list></contact-list>
+			<contact-item style="display: none"></contact-item>
+			<control-bar></control-bar>
+		</contact-mgr>
+		
+		<script src="./bower_components/jquery/dist/jquery.js"></script>
+		<script src="./bower_components/amplify/lib/amplify.core.js">
+		</script>
+		<script src="./bower_components/amplify/lib/amplify.store.js">
+		</script>
+		<script src="./bower_components/amplify/lib/amplify.request.js">
+		</script>
+		<script src="./js/data-access.js"></script>
+		<script src="./js/app.js"></script>
+	</body>
+</html>
